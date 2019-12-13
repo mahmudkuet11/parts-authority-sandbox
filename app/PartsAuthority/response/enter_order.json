@@ -1,0 +1,5 @@
+{
+    "responseDetail": "Your Order has been submitted successfully to the live system",
+    "responseStatus": "Success",
+    "orderFileXML": "<PAOrderEntry><version>.2</version><order><header><cust_num>64560</cust_num><cust_name>Mohammad Samrat</cust_name><ship_add1>3601 36th Ave</ship_add1><ship_add2></ship_add2><ship_city>Astoria</ship_city><ship_state>NY</ship_state><ship_zip>11106</ship_zip><ship_meth>FDH</ship_meth><order_num>PC1-test-999999999</order_num><ship_country>US</ship_country><admin_account>N</admin_account><price_override>N</price_override><location_number>8</location_number><est_frt>0</est_frt><conf_number>0</conf_number><tax_amount>0.00</tax_amount><paypal_number>0</paypal_number><ordtype>Q</ordtype><bo_allow></bo_allow><canc_date>0</canc_date><deliv_date>0</deliv_date><gift_mess></gift_mess></header><item><line_code>EL</line_code><part_num>101508</part_num><quantity>1</quantity><cost></cost><core></core><item_id></item_id><source></source><gift_mess></gift_mess></item></order></PAOrderEntry>"
+}

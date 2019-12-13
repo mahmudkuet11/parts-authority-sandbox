@@ -6,11 +6,19 @@
 namespace App\PartsAuthority\Actions;
 
 
-use App\PartsAuthority\Requests\RequestData;
+use App\PartsAuthority\Requests\EnterOrderRequestData;
 
 class EnterOrderAction extends BaseAction {
     
-    public function handle(RequestData $requestData) {
+    /**
+     * @var EnterOrderRequestData
+     */
+    public $reqData;
     
+    /**
+     * @return mixed
+     */
+    public function handle() {
+        return file_get_contents(app_path('PartsAuthority/response/enter_order.json'));
     }
 }

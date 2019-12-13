@@ -29,5 +29,11 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    
+    'parts_authority'  =>   [
+        'account_number'    =>  env('PA_ACCOUNT_NUMBER'),
+        'username'  =>  env('PA_USERNAME'),
+        'password'  =>  env('PA_PASSWORD')
+    ]
 
 ];

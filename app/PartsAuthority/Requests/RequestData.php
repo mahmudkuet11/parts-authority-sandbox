@@ -38,17 +38,25 @@ abstract class RequestData {
         $reqDataClassName = $reqDataMap->getClassName();
         $mapper = new \JsonMapper();
         /* @var $reqData RequestData */
-        return $mapper->map((object)$reqDataMap->reqData, new $reqDataClassName);
+        return $mapper->map($reqDataMap->reqData, new $reqDataClassName);
     }
     
     public function isAuthenticated() {
-        if (
-            $this->accountNum === "11111" &&
-            $this->userName === "test_user" &&
-            $this->userPass === "test_password"
-        ) {
-            return true;
+        $validAccounts = [
+            ['accountNum' => '11111', 'userName' => 'test_user', 'userPass' => 'test_password'],
+            ['accountNum' => config('services.parts_authority.account_number'), 'userName' => config('services.parts_authority.username'), 'userPass' => config('services.parts_authority.password')],
+        ];
+        
+        foreach ($validAccounts as $validAccount) {
+            if (
+                $this->accountNum === $validAccount['accountNum'] &&
+                $this->userName === $validAccount['userName'] &&
+                $this->userPass === $validAccount['userPass']
+            ) {
+                return true;
+            }
         }
+        
         
         return false;
     }

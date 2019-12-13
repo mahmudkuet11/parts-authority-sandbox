@@ -9,13 +9,15 @@ namespace App\PartsAuthority\Requests;
 class RequestDataMap {
     public $checkStock = CheckStockRequestData::class;
     
+    public $enterOrder = EnterOrderRequestData::class;
+    
     /**
      * @var string
      */
     public $reqData;
     
     public function __construct($reqData) {
-        $this->reqData = json_decode($reqData, true);
+        $this->reqData = json_decode($reqData);
     }
     
     public function getClassName() {
@@ -24,6 +26,6 @@ class RequestDataMap {
     }
     
     public function getAction() {
-        return $this->reqData['action'];
+        return $this->reqData->action;
     }
 }

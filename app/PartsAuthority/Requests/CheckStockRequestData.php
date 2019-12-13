@@ -20,17 +20,17 @@ class CheckStockRequestData extends RequestData {
     public $part_number;
     
     public function isValidPart() {
-        $validParts = [
+        $invalidParts = [
             ['line_code' => 'AA', 'part_number' => '11112222']
         ];
         
-        foreach ($validParts as $validPart) {
-            if ($validPart['line_code'] === $this->line_code && $validPart['part_number'] === $this->part_number) {
-                return true;
+        foreach ($invalidParts as $invalidPart) {
+            if ($invalidPart['line_code'] === $this->line_code && $invalidPart['part_number'] === $this->part_number) {
+                return false;
             }
         }
         
-        return false;
+        return true;
     }
     
     /**

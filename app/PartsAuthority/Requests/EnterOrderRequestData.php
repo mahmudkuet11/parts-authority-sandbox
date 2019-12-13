@@ -6,17 +6,23 @@
 namespace App\PartsAuthority\Requests;
 
 
-use App\PartsAuthority\Utils\Request\OrderHeader;
-use App\PartsAuthority\Utils\Request\OrderItem;
+use App\PartsAuthority\Actions\EnterOrderAction;
 
 class EnterOrderRequestData extends RequestData {
     /**
-     * @var OrderHeader
+     * @var \App\PartsAuthority\Utils\Request\OrderHeader
      */
     public $orderHeader;
     
     /**
-     * @var OrderItem[]
+     * @var \App\PartsAuthority\Utils\Request\OrderItem[]
      */
     public $orderItems;
+    
+    /**
+     * @return EnterOrderAction
+     */
+    public function getAction() {
+        return new EnterOrderAction($this);
+    }
 }
