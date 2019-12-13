@@ -11,6 +11,8 @@ class RequestDataMap {
     
     public $enterOrder = EnterOrderRequestData::class;
     
+    public $getOrderInformation = GetOrderInformationRequestData::class;
+    
     /**
      * @var string
      */

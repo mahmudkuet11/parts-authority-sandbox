@@ -19,5 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => [CheckAuthentication::class]], function(){
-    Route::get('orderEntry.psp', 'OrderEntryController@handle');
+    Route::get('orderEntry.psp', 'PartsAuthorityController@handle');
+    Route::get('checkOrderStatus.psp', 'PartsAuthorityController@handle');
 });
