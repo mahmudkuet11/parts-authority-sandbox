@@ -1,0 +1,36 @@
+{
+    "PackageContents": [{
+        "pkgid": "0024568883",
+        "sku": "EL101 508",
+        "tracking_number": "74899992240822250759",
+        "shipped_qty": "100"
+    }],
+    "ShippingInfo": [{
+        "pkgid": "0024568883",
+        "weight": "0.10",
+        "service": "SMART_POST",
+        "timestamp": "2019-12-12 10:12:30.175003",
+        "length": "10",
+        "height": "1",
+        "width": "6",
+        "tracking_number": "74899992240822250759",
+        "carrier": "FedEx",
+        "freight": "6.13"
+    }],
+    "responseDetail": "Order info and shipping detail response",
+    "responseStatus": "Success",
+    "orderInfo": [{
+        "Status": "Shipped",
+        "OrderNum": "20903",
+        "InvoiceNum": "195785",
+        "PaPoNum": "500001445881",
+        "ShippingCost": "0",
+        "TrackingNum": "74899992240822250759",
+        "ShippingWeight": "",
+        "cust_num": "64560",
+        "entryTime": "2019-12-12 06:01:35.065520",
+        "branch": "112",
+        "CustPoNum": "PC1-test-999999999",
+        "brord": "11220903"
+    }]
+}

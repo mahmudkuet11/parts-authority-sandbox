@@ -13,6 +13,8 @@ class RequestDataMap {
     
     public $getOrderInformation = GetOrderInformationRequestData::class;
     
+    public $getOrderShippingDetail = GetOrderShippingDetailRequestData::class;
+    
     /**
      * @var string
      */
