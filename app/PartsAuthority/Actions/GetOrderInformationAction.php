@@ -23,14 +23,22 @@ class GetOrderInformationAction extends BaseAction {
         $shippedOrders = ['PC1-test-999999999'];
         $entryPendingOrders = ['PC1-test-999999998'];
         
-        if(array_search($this->reqData->PoNumber, $shippedOrders) !== false){
+        $invalidPos = ['invalid_po'];
+        if (array_search($this->reqData->PoNumber, $invalidPos) !== false) {
+            return [
+                "responseDetail" => "Invalid PO",
+                "responseStatus" => "Failed"
+            ];
+        }
+        
+        if (array_search($this->reqData->PoNumber, $shippedOrders) !== false) {
             return $this->getShippedOrderResponse();
         }
-    
-        if(array_search($this->reqData->PoNumber, $entryPendingOrders) !== false){
+        
+        if (array_search($this->reqData->PoNumber, $entryPendingOrders) !== false) {
             return $this->getEntryPendingOrderResponse();
         }
-    
+        
         return $this->getEntryPendingOrderResponse();
     }
     
