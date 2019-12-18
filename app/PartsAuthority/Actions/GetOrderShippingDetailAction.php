@@ -19,6 +19,14 @@ class GetOrderShippingDetailAction extends BaseAction {
     public function handle() {
         $shippedOrders = ['PC1-test-999999999'];
         $entryPendingOrders = ['PC1-test-999999998'];
+    
+        $invalidPos = ['invalid_po'];
+        if (array_search($this->reqData->PoNumber, $invalidPos) !== false) {
+            return [
+                "responseDetail" => "Invalid PO",
+                "responseStatus" => "Failed"
+            ];
+        }
         
         if(array_search($this->reqData->PoNumber, $shippedOrders) !== false){
             return $this->getShippedOrderResponse();
