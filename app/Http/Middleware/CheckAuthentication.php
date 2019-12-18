@@ -13,6 +13,7 @@ class CheckAuthentication {
      * @param  \Closure                 $next
      *
      * @return mixed
+     * @throws \JsonMapper_Exception
      */
     public function handle($request, Closure $next) {
         $requestData = RequestData::getFromJson($request->get('reqData'));

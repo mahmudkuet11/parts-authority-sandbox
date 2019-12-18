@@ -33,11 +33,16 @@ abstract class RequestData {
      */
     public $action;
     
+    /**
+     * @param $reqDataJson
+     *
+     * @return RequestData|object
+     * @throws \JsonMapper_Exception
+     */
     public static function getFromJson($reqDataJson) {
         $reqDataMap = new RequestDataMap($reqDataJson);
         $reqDataClassName = $reqDataMap->getClassName();
         $mapper = new \JsonMapper();
-        /* @var $reqData RequestData */
         return $mapper->map($reqDataMap->reqData, new $reqDataClassName);
     }
     

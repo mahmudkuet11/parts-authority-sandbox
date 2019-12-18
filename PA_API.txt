@@ -1,0 +1,454 @@
+General Error Messages
+----------------------
+
+Response (Failure): [Bad User/Pass]
+{
+    "responseDetail": "Authentication Failure",
+    "responseStatus": "Failed"
+}
+
+Response (Failure): [Severely malformed requests]
+Error!'XX'
+  - In general XX will contain the name of the field missing or in error in your request
+
+
+Check Stock
+-----------
+
+GET http://eorders.panetny.com/api/orderEntry.psp?reqData=*JSON REQDATA*
+
+Request:
+{
+    "accountNum": "99999",          Account Number
+    "client": "ExampleClient V1",   Free-Format Text describing your client
+    "userName": "USERNAME",         API Username
+    "userPass": "PASSWORD",         API Password
+    "line_code": "ZZ",              Line Code of Part
+    "part_number": "PP112233",      Part Number
+    "action": "checkStock"          Action Requested
+}
+
+Response (Failure): [No matching parts]
+{
+    "responseDetail": {
+        "err_description": "No matching parts found",
+        "linecode": "ZZ",
+        "partnum": "PP112233"
+    },
+    "responseStatus": "Failed"
+}
+
+Response (Failure): [Missing line code or part number]
+{
+    "responseDetail": {
+        "err_description": "Nothing to read: ",
+        "spart": "ZZ",
+        "sfran": "PP112233"
+    },
+    "responseStatus": "Failed"
+}
+
+
+Response (Success):
+{
+    "responseDetail": {
+        "azstock": "000000000",         Stock available in the Arizona Area
+        "bxstock": "000000001",         Stock available in the Bronx Area
+        "bystock": "000000001",         Stock available in the Bayside Area
+        "core": "00000.00",             Core Cost
+        "castock": "000000000",         Stock available in the California Area
+        "dcstock": "000000000",         Stock available in the D.C. Area
+        "gastock": "000000000",         Stock available in the Georgia Area
+        "instock": "000000003",         Total Stock Available (Area Stocks + Vendor Stock)
+        "nystock": "000000002",         Stock available in the NY/Long Island Area
+        "price": "00143.25",            Part Price
+        "sfran": "ZZ",                  Line Code
+        "spart": "PP112233",            Part Number
+        "venstock": "000000000"         Reported Stock available from Vendor
+    },
+    "responseStatus": "Success"
+}
+
+Enter Order
+-----------
+
+GET http://eorders.panetny.com/api/orderEntry.psp?reqData=*JSON REQDATA*
+
+Request:
+{
+    "accountNum": "99999",              Account Number
+    "client": "ExampleClient V1",       Free-Format Text describing your client
+    "userName": "USERNAME",             API Username
+    "userPass": "PASSWORD",             API Password
+    "action": "enterOrder",             Action Requested
+    "orderHeader": {
+        "cust_name": "JOHN DOE",        Customer name
+        "order_num": "123456789012",    PO Number
+                                        * Decimal(11,0) recommended
+        "shipping_details": {
+            "company": "Company Name",     Ship-To Company Name
+            "phone": "XXXXXXXXXXXXXXX",    Ship-To Phone Number
+            "phone_ext": "XXXXXX",         Ship-To Company Name
+            "residential": "X"            Residential Address Y/N
+        },
+        "ship_add1": "123 ANY STREET",  Ship Address 1
+        "ship_add2": "APT 1A",          Ship Address 2
+        "ship_city": "ANYWHERE",        Ship City
+        "ship_state": "ZZ",             Ship State
+        "ship_zip": "12345",            Ship Zip/Postal Code
+        "ship_country": "US",           Ship Country
+        "ship_meth": "???",             Shipping Method (See Table Below)
+        "status": "live"                Status of order (Live or Test)
+    },
+    "orderItems": [
+        {
+            "line_code": "ZZ",          Line Code
+            "part_num": "PP112233",     Part Number
+            "quantity": "1"             Quantity to order
+        }                               (One per part on order)
+    ]
+}
+
+Response (Failure):
+{
+    "errorCode": "XXXX",                Error Code
+    "responseDetail": "XXXXXXXXXX",     Detailed description of error
+    "responseStatus": "Failed"
+}
+
+Possible Error Codes & Response Details:
+1001 - Missing cust_name
+1002 - Missing ship_add1
+1003 - Missing ship_city
+1004 - Missing ship_state
+1005 - Missing ship_zip
+1006 - Missing ship_meth
+1007 - Missing order_num
+1008 - Missing ship_country
+1009 - Account type error
+3001 - Duplicate order_num
+2001 - Missing line_code
+2002 - Missing part_num
+2003 - Missing quantity
+2004 - Missing cost
+2005 - Invalid Part - LC:?? Part#:??
+
+Response (Success):
+{
+    "orderFileXML":                     XML Representation of the placed order
+        "<PAOrderEntry>
+            <version>.2</version>
+            <order>
+                <header>
+                    <cust_num>99999</cust_num>
+                    <cust_name>JOHN DOE</cust_name>
+                    <ship_add1>123 ANY STREET</ship_add1>
+                    <ship_add2>APT 1A</ship_add2>
+                    <ship_city>ANYWHERE</ship_city>
+                    <ship_state>ZZ</ship_state>
+                    <ship_zip>12345</ship_zip>
+                    <ship_meth>???</ship_meth>
+                    <order_num>1234567890</order_num>
+                    <ship_country>US</ship_country>
+                    <admin_account>N</admin_account>
+                    <price_override>N</price_override>
+                    <location_number>8</location_number>
+                    <est_frt>0</est_frt>
+                    <conf_number>0</conf_number>
+                    <tax_amount>0.00</tax_amount>
+                    <paypal_number>0</paypal_number>
+                    <ordtype>Q</ordtype>
+                </header>
+                <item>
+                    <line_code>ZZ</line_code>
+                    <part_num>PP112233</part_num>
+                    <quantity>1</quantity>
+                    <cost>12.34</cost>
+                    <core/>
+                </item>
+            </order>
+        </PAOrderEntry>",
+    "responseDetail": "Your Order has been submitted successfully to the live system",
+    "responseStatus": "Success"
+}
+
+Shipping Methods:
+FD3 - FEDEX EXPRESS SAVER
+FDH - FEDEX HOME DELIVERY
+FIE - FEDEX INTERNATIONAL ECONOMY
+FIF - FEDEX INTERNATIONAL FIRST
+FIP - FEDEX INTERNATIONAL PRIORITY
+FPO - FEDEX PRIORITY OVERNIGHT
+FDO - FEDEX STANDARD OVERNIGHT
+FD2 - FEDEX 2DAY
+UPO - UPS EXPRESS
+UPX - UPS EXPRESS SAVER
+UPS - UPS GROUND
+UP1 - UPS NEXT DAY AIR
+U1S - UPS NEXT DAY AIR SAVER
+U1A - UPS NEXT DAY AIR. EARLY A.M
+UWE - UPS WORLDWIDE EXPEDITEDSM
+UWP - UPS WORLDWIDE EXPRESS PLUSSM
+UWX - UPS WORLDWIDE EXPRESSSM
+U2F - UPS 2ND DAY AIR A.M
+UP2 - UPS 2ND DAY AIR
+UP3 - UPS 3 DAY SELECT
+USE - EXPRESS MAIL
+UIE - EXPRESS MAIL INTERNATIONAL
+US1 - FIRST-CLASS MAIL
+USI - FIRST-CLASS MAIL INTERNATIONAL
+USP - PRIORITY MAIL
+UIP - PRIORITY MAIL INTERNATIONAL
+USS - STANDARD MAIL
+
+Get Order Information
+---------------------
+
+GET http://eorders.panetny.com/api/checkOrderStatus.psp?reqData=*JSON REQDATA*
+
+Request:
+{
+    "accountNum": "99999",          Account Number
+    "client": "ExampleClient V1",   Free-Format Text describing your client
+    "userName": "USERNAME",         API Username
+    "userPass": "PASSWORD",         API Password
+    "PoNumber": "99X99X",           PO Number to Query
+    "action": "getOrderInformation" Action Requested
+}
+
+Response (Failure):
+{
+    "responseDetail": "Invalid PO",
+    "responseStatus": "Failed"
+}
+
+Response (Success/Entry Pending): [Order Received, but not yet assigned a local order #]
+[
+    {
+        "CustPoNum": "99X99X",              Customer's PO Number
+        "InvoiceNum": "0",                  If order has been invoiced, this will be populated
+        "OrderNum": "0",                    If order has hit fulfillment, this will be populated
+        "PaPoNum": "50000010000",           PA internal PO number for this order
+        "ShippingCost": "",                 Populated if order has been shipped
+        "ShippingWeight": "",               Populated if order has been shipped
+        "Status": "Entry Pending",          Order Status, one of: Entry Pending/Processing/Shipped/Shipped Manually
+        "TrackingNum": "",                  Populated if order has been shipped
+        "branch": "99",                     Current branch that will fulfill order
+        "brord": "9900000",                 Branch & OrderNum combination
+        "cust_num": "99999",                Account Number
+        "entryTime": "2014-01-01 00:00:00"  Timestamp of order Receipt
+    },
+    {
+        (One entry per order matching PO Number)
+    }
+]
+
+Response (Success/Processing): [Order being fulfilled]
+[
+    {
+        "CustPoNum": "99X99X",              Customer's PO Number
+        "InvoiceNum": "0",                  If order has been invoiced, this will be populated
+        "OrderNum": "11111",                If order has hit fulfillment, this will be populated
+        "PaPoNum": "50000010000",           PA internal PO number for this order
+        "ShippingCost": "",                 Populated if order has been shipped
+        "ShippingWeight": "",               Populated if order has been shipped
+        "Status": "Processing",             Order Status, one of: Entry Pending/Processing/Shipped/Shipped Manually
+        "TrackingNum": "",                  Populated if order has been shipped
+        "branch": "99",                     Current branch that will fulfill order
+        "brord": "9911111",                 Branch & OrderNum combination
+        "cust_num": "99999",                Account Number
+        "entryTime": "2014-01-01 00:00:00"  Timestamp of order Receipt
+    },
+    {
+        (One entry per order matching PO Number)
+    }
+]
+
+Response (Success/Shipped or Shipped Manually): [Order Shipped, tracking should be available]
+[
+    {
+        "CustPoNum": "99X99X",              Customer's PO Number
+        "InvoiceNum": "222222",             If order has been invoiced, this will be populated
+        "OrderNum": "11111",                If order has hit fulfillment, this will be populated
+        "PaPoNum": "50000010000",           PA internal PO number for this order
+        "ShippingCost": "12.34",            Populated if order has been shipped
+        "ShippingWeight": "56.78",          Populated if order has been shipped
+        "Status": "Shipped",                Order Status, one of: Entry Pending/Processing/Shipped/Shipped Manually
+        "TrackingNum": "0123456789012345",  Populated if order has been shipped
+        "branch": "99",                     Current branch that will fulfill order
+        "brord": "9911111",                 Branch & OrderNum combination
+        "cust_num": "99999",                Account Number
+        "entryTime": "2014-01-01 00:00:00"  Timestamp of order Receipt
+    },
+    {
+        (One entry per order matching PO Number, If multiple tracking#s, there will be multiple entries)
+    }
+]
+
+Status Codes:
+Entry Pending    - Order Received, not in our ERP system yet
+Processing       - Order is being picked
+Shipped          - Order shipped, tracking included in response
+Shipped Manually - Order shipped, tracking not included in response
+
+Get Order Detail Information
+----------------------------
+
+GET http://eorders.panetny.com/api/checkOrderStatus.psp?reqData=*JSON REQDATA*
+
+Request:
+{
+    "accountNum": "99999",          Account Number
+    "client": "ExampleClient V1",   Free-Format Text describing your client
+    "userName": "USERNAME",         API Username
+    "userPass": "PASSWORD",         API Password
+    "PoNumber": "99X99X",           PO Number to Query
+    "action": "getOrderDetail"      Action Requested
+}
+
+Response (Failure):
+{
+    "responseDetail": "Invalid PO",
+    "responseStatus": "Failed"
+}
+
+Response (Success):
+{
+    "PartDetail": [
+        {
+            "backorder_qty": "0",       Quantity of parts on back-order
+            "brord": "9911111",         Branch & OrderNum combination
+            "line_item": "1",           Item # Sequence of part
+            "picked_qty": "1",          Quantity of parts picked for shipping
+            "sfran": "SI",              Line Code
+            "ship_verified_qty": "1",   Quantity of parts verified for shipment
+            "sku": "SICBS- 1338",       Line Code & Part number concatenation
+            "sunfmt": "CBS-1338",       Part Number
+            "supplied_qty": "1"         Quantity of parts supplied
+        },
+        {
+            (One entry per part on order matching PO Number)
+        }
+    ],
+    "orderInfo": [
+        {
+            ...                     Same data as in Order Information
+        }
+    ],
+    "responseDetail": "Order info and part detail response",
+    "responseStatus": "Success"
+}
+
+Order Shipping Detail
+---------------------
+
+GET http://eorders.panetny.com/api/checkOrderStatus.psp?reqData=*JSON Request Data*
+
+JSON Request Data:
+Request:
+{
+    "accountNum": "99999",             Account Number
+    "client": "ExampleClient V1",      Free-Format Text describing your client
+    "userName": "USERNAME",            API Username
+    "userPass": "PASSWORD",            API Password
+    "PoNumber": "99X99X",              PO Number to Query
+    "action": "getOrderShippingDetail" Action Requested
+}
+
+Response (Failure):
+{
+    "responseDetail": "Invalid PO",
+    "responseStatus": "Failed"
+}
+
+Response (Success):
+{
+    "PackageContents": [
+        {
+            "pkgid": "9999999999",         /* ID# of shipping box */
+            "sku": "ZZ99-9999",            /* Line Code & Part number concatenation */
+            "tracking_number": "XXXXXXXX", /* Carrier Tracking Number of package */
+            "shipped_qty": "99"            /* Quantity of item in box */
+        },
+        {
+            (One entry per packaged part on order matching PO number)
+        }
+    ],
+    "ShippingInfo": [
+        {
+            "pkgid": "9999999999",         /* ID# of shipping box */
+            "carrier": "XXXX",             /* Name of carrier used to ship package */
+            "service": "XXXXXXXXXXX",      /* Name of service used to ship package */
+            "weight": "9.99",              /* Weight of package */
+            "length": "99",                /* Length of package */
+            "height": "99",                /* Height of package */
+            "width": "99",                 /* Width of package */
+            "tracking_number": "XXXXXXXX", /* Carrier Tracking Number of package */
+            "freight": "9.99"              /* Total freight cost of package */
+        },
+        {
+            (One entry per tracking # on order matchin PO number)
+        }
+    ],
+    "orderInfo": [
+        {
+            ...                     Same data as in Order Information
+        }
+    ],
+    "responseDetail": "Order info and shipping detail response",
+    "responseStatus": "Success",
+}
+
+Get Invoices for Time Period
+----------------------------
+
+GET http://eorders.panetny.com/api/invoiceReport.psp?reqData=*JSON REQDATA*
+
+Request:
+{
+    "accountNum": "99999",          Account Number
+    "client": "ExampleClient V1",   Free-Format Text describing your client
+    "userName": "USERNAME",         API Username
+    "userPass": "PASSWORD",         API Password
+    "startDate": "YYYYMMDD",        Order Date from
+    "endDate": "YYYYMDDD",          Order Date to
+    "action": "getInvoiceInRange"   Action Requested
+}
+
+Response (Failure): [Bad Account#]
+{
+    "responseDetail": "Account Error",
+    "responseStatus": "Failed"
+}
+
+Response (Failure): [No Invoices]
+{
+    "responseDetail": "No Results Found",
+    "responseStatus": "Failed"
+}
+
+Response (Success):
+{
+    "responseDetail": [
+        {
+            "mhind": "I",           Status Indicator: I-Invoice / C-Credit
+            "xbran": "99",          Order/Invoice Branch
+            "xcore": "0.00",        Core cost
+            "xdate": "YYYYMMDD",    Invoice Date
+            "xfreight": "0.00",     Freight Cost
+            "xinv": "222222",       Invoice Number
+            "xinvtotal": "12.34",   Total part cost
+            "xline": "CE",          Line Code
+            "xmpline": "1",         Item # sequence of part
+            "xord": "11111",        Order Number
+            "xourpo": "",           PO Number
+            "xprice": "12.34",      Part unit cost
+            "xqty": "1",            Part Quantity
+            "xsku": "10503330"      Part Number
+        },
+        {
+            (One entry per part on orders matching order date range)
+        }
+    ],
+    "responseStatus": "Success"
+}
